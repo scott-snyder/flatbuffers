@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Google Inc. All rights reserved.
+ * Copyright 2015, 2023 Google Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -353,6 +353,10 @@ uint8_t *ResizeAnyVector(const reflection::Schema &schema, uoffset_t newsize,
   return vector_data(*flatbuf) + start;
 }
 
+// Work around gcc false positive
+#if __GNUC__ >= 13
+#pragma GCC diagnostic ignored "-Wstringop-overflow"
+#endif
 const uint8_t *AddFlatBuffer(std::vector<uint8_t> &flatbuf,
                              const uint8_t *newbuf, size_t newlen) {
   // Align to sizeof(uoffset_t) past sizeof(largest_scalar_t) since we're
